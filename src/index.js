@@ -88,11 +88,13 @@ export function getConditionsByPath(rootObject, path, expectedValue) {
 
 export function getObjectClassName(obj) {
   let result = null;
+  if (obj == null) {
+    return typeof(obj);
+  }
 
   if (obj['global']) {
     return 'global';
   }
-
 
   try {
     if (isMoment(obj)) {
