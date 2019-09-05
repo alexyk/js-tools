@@ -1,0 +1,67 @@
+{
+  "name": "js-tools",
+  "version": "0.0.1",
+  "description": "Own collection of tools like isString, isNumber, getObjectByPathName etc.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node node_modules/jest/bin/jest.js",
+    "test-debug": "node --inspect node_modules/.bin/jest --watch --runInBand"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexyk/js-tools.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "tools",
+    "js",
+    "isObject",
+    "isSymbol",
+    "isNumber",
+    "isString",
+    "getObjectByPathName",
+    "development",
+    "react",
+    "native"
+  ],
+  "author": "Alex K",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexyk/js-tools/issues"
+  },
+  "homepage": "https://github.com/alexyk/js-tools#readme",
+  "dependencies": {
+    "moment": "2.24.0"
+  },
+  "peerDependencies": {
+    "moment": "2.24.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.5.5",
+    "@babel/plugin-proposal-decorators": "7.4.4",
+    "@babel/plugin-proposal-throw-expressions": "7.2.0",
+    "@babel/plugin-transform-runtime": "7.5.5",
+    "@babel/polyfill": "7.4.4",
+    "@babel/preset-env": "7.5.5",
+    "@babel/runtime": "7.5.5",
+    "babel-eslint": "10.0.2",
+    "babel-jest": "24.9.0",
+    "eslint": "6.1.0",
+    "eslint-config-airbnb": "17.1.1",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.14.3",
+    "jest": "24.8.0",
+    "jest-react-native": "18.0.0",
+    "prettier": "1.18.2",
+    "redux-devtools-extension": "2.13.8",
+    "redux-logger": "3.0.6",
+    "redux-mock-store": "1.5.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transformIgnorePatterns": [
+      "node_modules"
+    ]
+  }
+}
