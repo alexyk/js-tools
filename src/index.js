@@ -37,6 +37,10 @@ export function isObject(value, className = null) {
   return result;
 }
 
+export function isArray(value) {
+  return (value instanceof Array);
+}
+
 export function isNumber(value) {
   return typeof value == "number";
 }
