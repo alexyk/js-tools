@@ -1,6 +1,13 @@
 import { isMoment } from 'moment';
 
 
+/**
+ * Logs in green color
+ * @param {Object} thisObject Calling object
+ * @param {any} data Data to log
+ * @param {String} extraTitle Title added to warning default title (red color)
+ * @param {String} description Additional text (normal color)
+ */
 export function logGreen(thisObject, data, extraTitle='', description='') {
   const details = getCallerDetails(thisObject, logGreen);
   console.log(`%c[${details}] %c ${extraTitle} %c${description}`, 
@@ -9,23 +16,66 @@ export function logGreen(thisObject, data, extraTitle='', description='') {
     "color: grey;   font-weight: normal");
   if (data) console.log(data);
 }
+
+/**
+ * Logs a warning message
+ * @param {Object} thisObject Calling object
+ * @param {any} data Data to log
+ * @param {String} extraTitle Title added to warning default title (red color)
+ * @param {String} description Additional text (normal color)
+ */
 export function logWarn(thisObject, data, extraTitle='', description='') {
-  const details = getCallerDetails(thisObject, logWarn);
-  console.log(`%c[${details}] %c ${extraTitle} %c${description}`, 
-    "color: red;  font-weight: bold",
-    "color: orange; font-weight: bold",
+  let details;
+  if (thisObject == null || isString(thisObject)) {
+    details = (isString(thisObject) ? thisObject : 'n/a');
+  } else {
+    details = getCallerDetails(thisObject, logWarn);
+  }
+  console.log(`%c[Warn] [${details}] %c${extraTitle} %c${description}`, 
+    "color: yellow;  font-weight: bold",
+    "color: white; font-weight: bold",
     "color: grey;   font-weight: normal");
   if (data) console.log(data);
 }
 
+/**
+ * Logs usually a caught error
+ * @param {Object} thisObject Calling object
+ * @param {any} data Data to log
+ * @param {String} error Title added to warning default title (red color)
+ * @param {String} description Additional text (normal color)
+ */
+export function logError(thisObject, data, error='', description='') {
+  let details;
+  if (thisObject == null || isString(thisObject)) {
+    details = (isString(thisObject) ? thisObject : 'n/a');
+  } else {
+    details = getCallerDetails(thisObject, logError);
+  }
+  console.log(`%c[Error] [${details}] %c${error} %c${description}`, 
+    "color: red;  font-weight: bold",
+    "color: orange; font-weight: bold",
+    "color: pink;   font-weight: normal");
+  if (data && Object.keys(data).length > 0) console.log(data);
+}
+
 
 // TODO: Move the following utilities to a separate place
-function getCallerDetails(thisObject, calledMethod) {
-  const callerMethodName = calledMethod.caller.name;
+export function getCallerDetails(thisObject, calledMethod) {
+  const callerMethodName = getCallerMethod(calledMethod);
   const callerClassName = getObjectClassName(thisObject);
   return `${callerClassName}::${callerMethodName}()`;
 }
 
+function getCallerMethod(calledMethod) {
+  let result;
+  if (!calledMethod || !calledMethod.caller || !calledMethod.caller.name) {
+    result = '';
+  } else {
+    result = calledMethod.caller.name.replace("\$", '');
+  }
+  return result;
+}
 
 
 export function isObject(value, className = null) {
@@ -117,10 +167,7 @@ export function getObjectClassName(obj) {
       result = typeof obj;
     }
   } catch (error) {
-    console.warn(
-      `[screens::utils::getObjectClassName] Error: ${error.message}`,
-      { error, obj }
-    );
+    logError('js-tools::getObjectClassName', null, error);
   }
   return result;
 }
