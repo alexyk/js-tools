@@ -172,8 +172,11 @@ export function getObjectClassName(obj) {
   return result;
 }
 
-export function getObjectFromPath(rootObject, propPath) {
-  const asArray = propPath.split('.');
+export function getObjectFromPath(rootObject, propPath, pathIncludesRoot=false) {
+  let asArray = propPath.split('.');
+  if (pathIncludesRoot) {
+    asArray.shift();
+  }
   let result = rootObject || {};
   for (let prop of asArray) {
     if (result) {
