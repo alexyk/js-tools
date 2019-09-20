@@ -69,14 +69,15 @@ export function getCallerDetails(thisObject, calledMethod) {
 
 function getCallerMethod(calledMethod) {
   let result;
-  if (!calledMethod || !calledMethod.caller || !calledMethod.caller.name) {
+
+  if (!calledMethod || !calledMethod.prototype || !calledMethod.prototype.caller || !calledMethod.prototype.caller.name) {
     result = '';
   } else {
     result = calledMethod.caller.name.replace("\$", '');
   }
+
   return result;
 }
-
 
 export function isObject(value, className = null) {
   let result = typeof value == "object";
