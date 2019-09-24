@@ -1,4 +1,4 @@
-import { isMoment } from 'moment';
+import moment, { isMoment } from 'moment';
 
 let config = {
   noColor: false,
@@ -260,6 +260,23 @@ export function getObjectFromPath(rootObject, propPath, pathIncludesRoot=false) 
   }
 
   return result;
+}
+
+var timeData = {};
+function formatTime(value, precision=2) {
+  let result = (value/1000).toPrecision(precision);
+  result += 's';
+  return result;
+}
+export function measureTime(label, precision=2) {
+  let currentValue = moment();
+  let lastValue = timeData[label];
+  if (lastValue != null) {
+    return formatTime(currentValue-lastValue, precision);
+  } else {
+    timeData[label] = currentValue;
+    return '0s';
+  }
 }
 
 function setConfig(option, value) {
