@@ -5,6 +5,35 @@ let config = {
   noObjects: false
 }
 
+/**
+ * Used internally by logGreen, logWarn, logError
+ * @param {Object|String} thisObject 
+ * @param {String} extraTitle 
+ * @param {String} description 
+ * @param {Object|String|Number} data 
+ */
+function processLogArgs(thisObject, extraTitle, description, data) {
+  let args = [thisObject, description, data];
+
+  if (extraTitle != null) {
+    args.splice(1, 0, extraTitle); // add extra title at index 1 if not null
+  }
+  if (config.noObjects) {
+    if (isObject(thisObject)) {
+      if (thisObject == null) {
+        args[0] = '    ';// add indent if object is null
+      } else {
+        args.shift();
+      }
+    }
+    if (isObject(data)) {
+      args.pop(data);
+    }  
+  }
+
+  return args;
+}
+
 
 /**
  * Logs in green color
@@ -15,10 +44,7 @@ let config = {
  */
 export function logGreen(thisObject, data, extraTitle='', description='') {
   if (config.noColor) {
-    let args = [thisObject, extraTitle, description, data];
-    if (isObject(thisObject)) {
-      args.shift();
-    }
+    const args = processLogArgs(thisObject, extraTitle, description, data);
     console.log(...args);
     return;
   }
@@ -28,7 +54,7 @@ export function logGreen(thisObject, data, extraTitle='', description='') {
     "color: green;  font-weight: bold",
     "color: orange; font-weight: bold",
     "color: grey;   font-weight: normal");
-  if (data) console.log(data);
+  if (!isObjectEmpty(data)) console.log(data);
 }
 
 /**
@@ -40,10 +66,7 @@ export function logGreen(thisObject, data, extraTitle='', description='') {
  */
 export function logWarn(thisObject, data, extraTitle='', description='') {
   if (config.noColor) {
-    let args = [thisObject, extraTitle, description, data];
-    if (isObject(thisObject)) {
-      args.shift();
-    }
+    const args = processLogArgs(thisObject, extraTitle, description, data);
     console.warn(...args);
     return;
   }
@@ -58,7 +81,7 @@ export function logWarn(thisObject, data, extraTitle='', description='') {
     "color: yellow;  font-weight: bold",
     "color: white; font-weight: bold",
     "color: grey;   font-weight: normal");
-  if (data) console.log(data);
+  if (!isObjectEmpty(data)) console.log(data);
 }
 
 /**
@@ -70,10 +93,7 @@ export function logWarn(thisObject, data, extraTitle='', description='') {
  */
 export function logError(thisObject, data, error='', description='') {
   if (config.noColor) {
-    let args = [thisObject, description, data];
-    if (isObject(thisObject)) {
-      args.shift();
-    }
+    const args = processLogArgs(thisObject, null, description, data);
     console.error(...args);
     return;
   }
@@ -88,7 +108,7 @@ export function logError(thisObject, data, error='', description='') {
     "color: red;  font-weight: bold",
     "color: orange; font-weight: bold",
     "color: pink;   font-weight: normal");
-  if (data && Object.keys(data).length > 0) console.log(data);
+  if (!isObjectEmpty(data)) console.log(data);
 }
 
 
@@ -96,7 +116,7 @@ export function logError(thisObject, data, error='', description='') {
 export function getCallerDetails(thisObject, calledMethod) {
   const callerMethodName = getCallerMethod(calledMethod);
   const callerClassName = getObjectClassName(thisObject);
-  return `${callerClassName}::${callerMethodName}()`;
+  return `${callerClassName}::${callerMethodName}`;
 }
 
 function getCallerMethod(calledMethod) {
@@ -106,10 +126,16 @@ function getCallerMethod(calledMethod) {
     result = '';
   } else {
     result = calledMethod.caller.name.replace("\$", '');
+    result += '()';
   }
 
   return result;
 }
+
+export function isObjectEmpty(object) {
+  return (!object || !isObject(object) || Object.keys(object).length > 0);
+}
+
 
 export function isObject(value, className = null) {
   let result = typeof value == "object";
