@@ -1,5 +1,10 @@
 import { isMoment } from 'moment';
 
+let config = {
+  noColor: false,
+  noObjects: false
+}
+
 
 /**
  * Logs in green color
@@ -9,6 +14,15 @@ import { isMoment } from 'moment';
  * @param {String} description Additional text (normal color)
  */
 export function logGreen(thisObject, data, extraTitle='', description='') {
+  if (config.noColor) {
+    let args = [thisObject, extraTitle, description, data];
+    if (isObject(thisObject)) {
+      args.shift();
+    }
+    console.log(...args);
+    return;
+  }
+
   const details = getCallerDetails(thisObject, logGreen);
   console.log(`%c[${details}] %c ${extraTitle} %c${description}`, 
     "color: green;  font-weight: bold",
@@ -25,6 +39,15 @@ export function logGreen(thisObject, data, extraTitle='', description='') {
  * @param {String} description Additional text (normal color)
  */
 export function logWarn(thisObject, data, extraTitle='', description='') {
+  if (config.noColor) {
+    let args = [thisObject, extraTitle, description, data];
+    if (isObject(thisObject)) {
+      args.shift();
+    }
+    console.warn(...args);
+    return;
+  }
+
   let details;
   if (thisObject == null || isString(thisObject)) {
     details = (isString(thisObject) ? thisObject : 'n/a');
@@ -46,6 +69,15 @@ export function logWarn(thisObject, data, extraTitle='', description='') {
  * @param {String} description Additional text (normal color)
  */
 export function logError(thisObject, data, error='', description='') {
+  if (config.noColor) {
+    let args = [thisObject, description, data];
+    if (isObject(thisObject)) {
+      args.shift();
+    }
+    console.error(...args);
+    return;
+  }
+
   let details;
   if (thisObject == null || isString(thisObject)) {
     details = (isString(thisObject) ? thisObject : 'n/a');
@@ -90,6 +122,20 @@ export function isObject(value, className = null) {
 
 export function isArray(value) {
   return (value instanceof Array);
+}
+
+export function isFunction(value) {
+  let result = false;
+
+  if (isString(value)) {
+    //let t = eval(value) 
+    //result = typeof(eval(value) == 'function');
+    result = value.includes('() => {')
+  } else {
+    result = (typeof(value) == 'function');
+  }
+
+  return result;
 }
 
 export function isNumber(value) {
@@ -189,3 +235,15 @@ export function getObjectFromPath(rootObject, propPath, pathIncludesRoot=false) 
 
   return result;
 }
+
+function setConfig(option, value) {
+  if (option == 'nodeMode') {
+    config.noColor = true;
+    config.noObjects = true;
+  } else {
+    config[option] = value;
+  }
+}
+export {
+  config, setConfig
+};
