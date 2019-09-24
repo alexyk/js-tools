@@ -30,9 +30,6 @@
     "url": "https://github.com/alexyk/js-tools/issues"
   },
   "homepage": "https://github.com/alexyk/js-tools#readme",
-  "dependencies": {
-    "moment": "2.24.0"
-  },
   "peerDependencies": {
     "moment": "2.24.0"
   },
@@ -51,6 +48,7 @@
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.14.3",
+    "install-peers": "1.0.3",
     "jest": "24.8.0",
     "jest-react-native": "18.0.0",
     "prettier": "1.18.2",
