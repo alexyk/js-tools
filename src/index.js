@@ -35,6 +35,33 @@ function processLogArgs(thisObject, extraTitle, description, data) {
 }
 
 
+export function log(...args) {
+  let hasArgs = args.length > 0;
+  let arg1 = args[0];
+
+  if (hasArgs && isObject(arg1) && config.noObjects) {
+    return;
+  }
+  if (!hasArgs) {
+    console.log();
+    return;
+  }
+
+  
+  if (config.noColor && arg1.includes('%c')) {
+    args = [arg1.replace(/\%c/g, '')];
+  } else if (config.noObjects) {
+    args = args.filter(item => (!isObject(item)));
+  }
+
+  console.log(...args);
+}
+
+export function dlog(...args) {
+  console.log('[DEBUG]', ...args);
+}
+
+
 /**
  * Logs in green color
  * @param {Object} thisObject Calling object
@@ -45,12 +72,12 @@ function processLogArgs(thisObject, extraTitle, description, data) {
 export function logGreen(thisObject, data, extraTitle='', description='') {
   if (config.noColor) {
     const args = processLogArgs(thisObject, extraTitle, description, data);
-    console.log(...args);
+    log(...args);
     return;
   }
 
   const details = getCallerDetails(thisObject, logGreen);
-  console.log(`%c[${details}] %c ${extraTitle} %c${description}`, 
+  log(`%c[${details}] %c ${extraTitle} %c${description}`, 
     "color: green;  font-weight: bold",
     "color: orange; font-weight: bold",
     "color: grey;   font-weight: normal");
@@ -77,7 +104,7 @@ export function logWarn(thisObject, data, extraTitle='', description='') {
   } else {
     details = getCallerDetails(thisObject, logWarn);
   }
-  console.log(`%c[Warn] [${details}] %c${extraTitle} %c${description}`, 
+  log(`%c[Warn] [${details}] %c${extraTitle} %c${description}`, 
     "color: yellow;  font-weight: bold",
     "color: white; font-weight: bold",
     "color: grey;   font-weight: normal");
@@ -93,7 +120,8 @@ export function logWarn(thisObject, data, extraTitle='', description='') {
  */
 export function logError(thisObject, data, error='', description='') {
   if (config.noColor) {
-    const args = processLogArgs(thisObject, null, description, data);
+    const args = processLogArgs('[ERROR] ' + thisObject, " - " + error.toString(), description ? `(${description})` : '', data);
+    log();
     console.error(...args);
     return;
   }
@@ -104,7 +132,7 @@ export function logError(thisObject, data, error='', description='') {
   } else {
     details = getCallerDetails(thisObject, logError);
   }
-  console.log(`%c[Error] [${details}] %c${error} %c${description}`, 
+  log(`%c[Error] [${details}] %c${error} %c${description}`, 
     "color: red;  font-weight: bold",
     "color: orange; font-weight: bold",
     "color: pink;   font-weight: normal");
