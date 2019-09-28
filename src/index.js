@@ -1,9 +1,5 @@
 import moment, { isMoment } from 'moment';
-
-let config = {
-  noColor: false,
-  noObjects: false
-}
+import config, {setConfig, LOG_TYPE} from './config'
 
 /**
  * Used internally by logGreen, logWarn, logError
@@ -34,8 +30,7 @@ function processLogArgs(thisObject, extraTitle, description, data) {
   return args;
 }
 
-
-export function log(...args) {
+function log(...args) {
   let hasArgs = args.length > 0;
   let arg1 = args[0];
 
@@ -57,10 +52,11 @@ export function log(...args) {
   console.log(...args);
 }
 
-export function dlog(...args) {
+
+function dlog(...args) {
   console.log('[DEBUG]', ...args);
 }
-
+  
 
 /**
  * Logs in green color
@@ -69,7 +65,7 @@ export function dlog(...args) {
  * @param {String} extraTitle Title added to warning default title (red color)
  * @param {String} description Additional text (normal color)
  */
-export function logGreen(thisObject, data, extraTitle='', description='') {
+function logGreen(thisObject, data, extraTitle='', description='') {
   if (config.noColor) {
     const args = processLogArgs(thisObject, extraTitle, description, data);
     log(...args);
@@ -91,7 +87,7 @@ export function logGreen(thisObject, data, extraTitle='', description='') {
  * @param {String} extraTitle Title added to warning default title (red color)
  * @param {String} description Additional text (normal color)
  */
-export function logWarn(thisObject, data, extraTitle='', description='') {
+function logWarn(thisObject, data, extraTitle='', description='') {
   if (config.noColor) {
     const args = processLogArgs(thisObject, extraTitle, description, data);
     console.warn(...args);
@@ -118,7 +114,7 @@ export function logWarn(thisObject, data, extraTitle='', description='') {
  * @param {String} error Title added to warning default title (red color)
  * @param {String} description Additional text (normal color)
  */
-export function logError(thisObject, data, error='', description='') {
+function logError(thisObject, data, error='', description='') {
   if (config.noColor) {
     const args = processLogArgs('[ERROR] ' + thisObject, " - " + error.toString(), description ? `(${description})` : '', data);
     log();
@@ -141,7 +137,7 @@ export function logError(thisObject, data, error='', description='') {
 
 
 // TODO: Move the following utilities to a separate place
-export function getCallerDetails(thisObject, calledMethod) {
+function getCallerDetails(thisObject, calledMethod) {
   const callerMethodName = getCallerMethod(calledMethod);
   const callerClassName = getObjectClassName(thisObject);
   return `${callerClassName}::${callerMethodName}`;
@@ -160,12 +156,12 @@ function getCallerMethod(calledMethod) {
   return result;
 }
 
-export function isObjectEmpty(object) {
+function isObjectEmpty(object) {
   return (!object || !isObject(object) || Object.keys(object).length > 0);
 }
 
 
-export function isObject(value, className = null) {
+function isObject(value, className = null) {
   let result = typeof value == "object";
   if (!result) {
     className = className ? className : getObjectClassName(value);
@@ -174,11 +170,11 @@ export function isObject(value, className = null) {
   return result;
 }
 
-export function isArray(value) {
+function isArray(value) {
   return (value instanceof Array);
 }
 
-export function isFunction(value) {
+function isFunction(value) {
   let result = false;
 
   if (isString(value)) {
@@ -192,19 +188,19 @@ export function isFunction(value) {
   return result;
 }
 
-export function isNumber(value) {
+function isNumber(value) {
   return typeof value == "number";
 }
 
-export function isString(value) {
+function isString(value) {
   return typeof value == "string";
 }
 
-export function isSymbol(obj, className = null) {
+function isSymbol(obj, className = null) {
   return (className || getObjectClassName(obj)) == "Symbol";
 }
 
-export function getObjectKeysCount(obj) {
+function getObjectKeysCount(obj) {
   const result = (obj && Object.keys(obj).length) || -1;
   return result;
 }
@@ -216,7 +212,7 @@ export function getObjectKeysCount(obj) {
  * @param {String} path A path to the prop in the form "rootObject.prop1.anotherProp"
  * @param {any} expectedValue What the path is expected to evaluate to
  */
-export function getConditionsByPath(rootObject, path, expectedValue) {
+function getConditionsByPath(rootObject, path, expectedValue) {
   let conditions = {};
   let comparisonResult = false;
 
@@ -241,7 +237,7 @@ export function getConditionsByPath(rootObject, path, expectedValue) {
   return {conditions, comparisonResult}
 }
 
-export function getObjectClassName(obj) {
+function getObjectClassName(obj) {
   let result = null;
   if (obj == null) {
     return typeof(obj);
@@ -273,7 +269,7 @@ export function getObjectClassName(obj) {
   return result;
 }
 
-export function getObjectFromPath(rootObject, propPath, pathIncludesRoot=false) {
+function getObjectFromPath(rootObject, propPath, pathIncludesRoot=false) {
   let asArray = propPath.split('.');
   if (pathIncludesRoot) {
     asArray.shift();
@@ -290,13 +286,14 @@ export function getObjectFromPath(rootObject, propPath, pathIncludesRoot=false) 
   return result;
 }
 
+
 var timeData = {};
 function formatTime(value, precision=2) {
   let result = (value/1000).toPrecision(precision);
   result += 's';
   return result;
 }
-export function measureTime(label, precision=2) {
+function measureTime(label, precision=2) {
   let currentValue = moment();
   let lastValue = timeData[label];
   if (lastValue != null) {
@@ -307,14 +304,10 @@ export function measureTime(label, precision=2) {
   }
 }
 
-function setConfig(option, value) {
-  if (option == 'nodeMode') {
-    config.noColor = true;
-    config.noObjects = true;
-  } else {
-    config[option] = value;
-  }
-}
 export {
-  config, setConfig
-};
+  config, setConfig, LOG_TYPE, measureTime,
+  log, dlog, logGreen, logWarn, logError, 
+  getObjectClassName, getObjectFromPath, getConditionsByPath, getObjectKeysCount,
+  isString, isNumber, isSymbol, isObjectEmpty, isObject, isArray, isFunction,
+  callWithArgs
+}
