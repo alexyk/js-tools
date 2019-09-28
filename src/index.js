@@ -308,6 +308,5 @@ export {
   config, setConfig, LOG_TYPE, measureTime,
   log, dlog, logGreen, logWarn, logError, 
   getObjectClassName, getObjectFromPath, getConditionsByPath, getObjectKeysCount,
-  isString, isNumber, isSymbol, isObjectEmpty, isObject, isArray, isFunction,
-  callWithArgs
+  isString, isNumber, isSymbol, isObjectEmpty, isObject, isArray, isFunction
 }

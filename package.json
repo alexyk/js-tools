@@ -1,10 +1,10 @@
 {
   "name": "js-tools",
-  "version": "0.0.1",
+  "version": "0.1.0-es5",
   "description": "Own collection of tools like isString, isNumber, getObjectByPathName etc.",
   "main": "build/index.js",
   "scripts": {
-    "build": "babel-node src -d build",
+    "build": "npx babel src -d build",
     "test": "node node_modules/jest/bin/jest.js",
     "test-debug": "node --inspect node_modules/.bin/jest --watch --runInBand"
   },
