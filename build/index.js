@@ -239,6 +239,11 @@ function isObjectEmpty(object) {
 
 function isObject(value) {
   var className = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+  if (value == null) {
+    return false;
+  }
+
   var result = _typeof(value) == "object";
 
   if (!result) {
