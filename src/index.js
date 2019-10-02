@@ -162,6 +162,10 @@ function isObjectEmpty(object) {
 
 
 function isObject(value, className = null) {
+  if (value == null) {
+    return false;
+  }
+
   let result = typeof value == "object";
   if (!result) {
     className = className ? className : getObjectClassName(value);
