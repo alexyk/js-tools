@@ -162,6 +162,10 @@ function isObjectEmpty(object) {
 
 
 function isObject(value, className = null) {
+  if (value == null) {
+    return false;
+  }
+
   let result = typeof value == "object";
   if (!result) {
     className = className ? className : getObjectClassName(value);
@@ -308,6 +312,5 @@ export {
   config, setConfig, LOG_TYPE, measureTime,
   log, dlog, logGreen, logWarn, logError, 
   getObjectClassName, getObjectFromPath, getConditionsByPath, getObjectKeysCount,
-  isString, isNumber, isSymbol, isObjectEmpty, isObject, isArray, isFunction,
-  callWithArgs
+  isString, isNumber, isSymbol, isObjectEmpty, isObject, isArray, isFunction
 }
