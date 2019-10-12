@@ -72,8 +72,8 @@ function logGreen(thisObject, data, extraTitle='', description='') {
     return;
   }
 
-  // one argument
-  if (data == null && extraTitle == null && description == null) {
+  // one argument case
+  if (!data && !extraTitle && !description) {
     log(`%c${thisObject}`, "color: green;  font-weight: normal")
     return;
   }
