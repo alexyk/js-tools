@@ -72,6 +72,12 @@ function logGreen(thisObject, data, extraTitle='', description='') {
     return;
   }
 
+  // one argument
+  if (data == null && extraTitle == null && description == null) {
+    log(`%c${thisObject}`, "color: green;  font-weight: normal")
+    return;
+  }
+
   const details = getCallerDetails(thisObject, logGreen);
   log(`%c[${details}] %c ${extraTitle} %c${description}`, 
     "color: green;  font-weight: bold",
