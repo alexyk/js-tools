@@ -13,6 +13,7 @@ exports.getObjectClassName = getObjectClassName;
 exports.getObjectFromPath = getObjectFromPath;
 exports.getConditionsByPath = getConditionsByPath;
 exports.getObjectKeysCount = getObjectKeysCount;
+exports.getCallerDetails = getCallerDetails;
 exports.isString = isString;
 exports.isNumber = isNumber;
 exports.isSymbol = isSymbol;
@@ -137,6 +138,12 @@ function logGreen(thisObject, data) {
     var args = processLogArgs(thisObject, extraTitle, description, data);
     log.apply(void 0, _toConsumableArray(args));
     return;
+  } // one argument case
+
+
+  if (!data && !extraTitle && !description) {
+    log("%c".concat(thisObject), "color: green;  font-weight: normal");
+    return;
   }
 
   var details = getCallerDetails(thisObject, logGreen);
@@ -215,8 +222,8 @@ function logError(thisObject, data) {
 
 
 function getCallerDetails(thisObject, calledMethod) {
-  var callerMethodName = getCallerMethod(calledMethod);
-  var callerClassName = getObjectClassName(thisObject);
+  var callerMethodName = isString(calledMethod) ? calledMethod : getCallerMethod(calledMethod);
+  var callerClassName = isString(thisObject) ? thisObject : getObjectClassName(thisObject);
   return "".concat(callerClassName, "::").concat(callerMethodName);
 }
 

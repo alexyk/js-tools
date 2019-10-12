@@ -1,6 +1,6 @@
 {
   "name": "js-tools",
-  "version": "0.1.1-es5",
+  "version": "0.1.2-es5",
   "description": "Own collection of tools like isString, isNumber, getObjectByPathName etc.",
   "main": "build/index.js",
   "scripts": {
