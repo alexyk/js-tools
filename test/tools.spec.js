@@ -1,4 +1,4 @@
-import { getConditionsByPath } from "../src/";
+import { getConditionsByPath, getCallerDetails } from "../src/";
 
 
 describe('getConditionsByPath', () => {
@@ -29,4 +29,8 @@ describe('getConditionsByPath', () => {
     });
     expect(comparisonResult)                .toBe(false);
   });
+
+  it("getCallerDetails", () => {
+    expect(getCallerDetails('hello', 'there'))    .toEqual(`hello::there`)
+  })
 })
