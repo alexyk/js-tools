@@ -72,6 +72,12 @@ function logGreen(thisObject, data, extraTitle='', description='') {
     return;
   }
 
+  // one argument
+  if (data == null && extraTitle == null && description == null) {
+    log(`%c${thisObject}`, "color: green;  font-weight: normal")
+    return;
+  }
+
   const details = getCallerDetails(thisObject, logGreen);
   log(`%c[${details}] %c ${extraTitle} %c${description}`, 
     "color: green;  font-weight: bold",
@@ -138,8 +144,8 @@ function logError(thisObject, data, error='', description='') {
 
 // TODO: Move the following utilities to a separate place
 function getCallerDetails(thisObject, calledMethod) {
-  const callerMethodName = getCallerMethod(calledMethod);
-  const callerClassName = getObjectClassName(thisObject);
+  const callerMethodName = (isString(calledMethod) ? calledMethod : getCallerMethod(calledMethod));
+  const callerClassName = (isString(thisObject) ? thisObject : getObjectClassName(thisObject));
   return `${callerClassName}::${callerMethodName}`;
 }
 
@@ -311,6 +317,6 @@ function measureTime(label, precision=2) {
 export {
   config, setConfig, LOG_TYPE, measureTime,
   log, dlog, logGreen, logWarn, logError, 
-  getObjectClassName, getObjectFromPath, getConditionsByPath, getObjectKeysCount,
+  getObjectClassName, getObjectFromPath, getConditionsByPath, getObjectKeysCount, getCallerDetails,
   isString, isNumber, isSymbol, isObjectEmpty, isObject, isArray, isFunction
 }
